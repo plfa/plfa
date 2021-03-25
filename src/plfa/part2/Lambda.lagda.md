@@ -53,12 +53,13 @@ four.
 ## Imports
 
 ```
-open import Data.Bool using (T; not)
+open import Data.Bool using (Bool; true; false; T; not)
 open import Data.Empty using (⊥; ⊥-elim)
 open import Data.List using (List; _∷_; [])
 open import Data.Nat using (ℕ; zero; suc)
 open import Data.Product using (∃-syntax; _×_)
 open import Data.String using (String; _≟_)
+open import Data.Unit using (tt)
 open import Relation.Nullary using (Dec; yes; no; ¬_)
 open import Relation.Nullary.Decidable using (⌊_⌋; False; toWitnessFalse)
 open import Relation.Nullary.Negation using (¬?)
@@ -219,34 +220,35 @@ Some people find it annoying to write `` ` "x" `` instead of `x`.
 We can make examples with lambda terms slightly easier to write
 by adding the following definitions:
 ```
-ƛ′_⇒_ : Term → Term → Term
-ƛ′ (` x) ⇒ N  =  ƛ x ⇒ N
-ƛ′ _ ⇒ _      =  ⊥-elim impossible
-  where postulate impossible : ⊥
+var? : (t : Term) → Bool
+var? (` _)  =  true
+var? _      =  false
 
-case′_[zero⇒_|suc_⇒_] : Term → Term → Term → Term → Term
+ƛ′_⇒_ : (t : Term) → {_ : T (var? t)} → Term → Term
+ƛ′_⇒_ (` x) N = ƛ x ⇒ N
+
+case′_[zero⇒_|suc_⇒_] : Term → Term → (t : Term) → {_ : T (var? t)} → Term → Term
 case′ L [zero⇒ M |suc (` x) ⇒ N ]  =  case L [zero⇒ M |suc x ⇒ N ]
-case′ _ [zero⇒ _ |suc _ ⇒ _ ]      =  ⊥-elim impossible
-  where postulate impossible : ⊥
 
-μ′_⇒_ : Term → Term → Term
+μ′_⇒_ : (t : Term) → {_ : T (var? t)} → Term → Term
 μ′ (` x) ⇒ N  =  μ x ⇒ N
-μ′ _ ⇒ _      =  ⊥-elim impossible
-  where postulate impossible : ⊥
 ```
-We intend to apply the function only when the first term is a variable, which we
-indicate by postulating a term `impossible` of the empty type `⊥`.  If we use
-C-c C-n to normalise the term
 
-    ƛ′ two ⇒ two
+Recall that `T` is a function that maps from the computation world to
+the evidence world, as
+[defined]({{ site.baseurl }}/Decidable/#relating-evidence-and-computation)
+in Chapter [Decidable]({{ site.baseurl }}/Decidable/).  We ensure to
+use the primed functions only when the respective term argument is a
+variable, which we do by providing implicit evidence.  For example, if
+we tried to define an abstraction term that binds anything but a
+variable:
 
-Agda will return an answer warning us that the impossible has occurred:
+    _ : Term
+    _ = ƛ′ two ⇒ two
 
-    ⊥-elim (plfa.part2.Lambda.impossible (`` `suc (`suc `zero)) (`suc (`suc `zero)) ``)
-
-While postulating the impossible is a useful technique, it must be
-used with care, since such postulation could allow us to provide
-evidence of _any_ proposition whatsoever, regardless of its truth.
+Agda would complain it cannot find a value of the bottom type for the
+implicit argument. Note the implicit argument's type reduces to `⊥`
+when term `t` is anything but a variable.
 
 The definition of `plus` can now be written as follows:
 ```
