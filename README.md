@@ -325,7 +325,7 @@ If you want Stack to use your system installation of GHC, follow the instruction
 
 <!-- Links -->
 
-[epub]: https://plfa.github.io/out/epub/plfa.epub
+[epub]: https://plfa.github.io/plfa.epub
 [plfa]: http://plfa.inf.ed.ac.uk
 [plfa-dev]: https://github.com/plfa/plfa.github.io/archive/dev.zip
 [plfa-status]: https://travis-ci.org/plfa/plfa.github.io.svg?branch=dev
