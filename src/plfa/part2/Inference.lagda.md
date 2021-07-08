@@ -188,7 +188,7 @@ We can extract the grammar for terms from the above:
     L⁺, M⁺, N⁺ ::=                      terms with synthesized type
       x                                   variable
       L⁺ · M⁻                             application
-      M⁻ ↓ A                              switch to inherited
+      M⁻ ↓ A                              switch to synthesized
 
     L⁻, M⁻, N⁻ ::=                      terms with inherited type
       ƛ x ⇒ N⁻                            abstraction
@@ -196,7 +196,7 @@ We can extract the grammar for terms from the above:
       `suc M⁻                             successor
       case L⁺ [zero⇒ M⁻ |suc x ⇒ N⁻ ]     case
       μ x ⇒ N⁻                            fixpoint
-      M⁺ ↑                                switch to synthesized
+      M⁺ ↑                                switch to inherited
 
 We will formalise the above shortly.
 
@@ -220,9 +220,9 @@ Similarly, given context `Γ`, inherited term `M`, and type `A`, we
 must decide whether `Γ ⊢ M ↓ A` holds, or its negation.
 
 Our proof is constructive. In the synthesised case, it will either
-deliver a pair of a type `A` and evidence that `Γ ⊢ M ↓ A`, or a function
+deliver a pair of a type `A` and evidence that `Γ ⊢ M ↑ A` holds, or a function
 that given such a pair produces evidence of a contradiction. In the inherited
-case, it will either deliver evidence that `Γ ⊢ M ↑ A`, or a function
+case, it will either deliver evidence that `Γ ⊢ M ↓ A` holds, or a function
 that given such evidence produces evidence of a contradiction.
 The positive case is referred to as _soundness_ --- synthesis and inheritance
 succeed only if the corresponding relation holds.  The negative case is

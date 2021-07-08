@@ -69,7 +69,7 @@ open import Relation.Nullary.Negation using (contradiction)
 open import Function using (_∘_)
 open import plfa.part2.Untyped
   using (Context; ★; _∋_; ∅; _,_; Z; S_; _⊢_; `_; _·_; ƛ_;
-         #_; twoᶜ; ext; rename; exts; subst; subst-zero; _[_])
+         #_; twoᶜ; plusᶜ; ext; rename; exts; subst; subst-zero; _[_])
 open import plfa.part2.Substitution using (Rename; extensionality; rename-id)
 ```
 
@@ -449,7 +449,7 @@ simple program that diverges. It applies `Δ` to itself. The semantics
 assigns to `Ω` the meaning `⊥`. There are several ways to derive this, we
 shall start with one that makes use of the `⊔-intro` rule.  First,
 `denot-Δ` tells us that `Δ` evaluates to `((⊥ ↦ ⊥) ⊔ ⊥) ↦ ⊥`
-(choose `v₁ = v₂ = ⊥`).  Next, `Δ` also evaluates to `⊥ ↦ ⊥` by use of
+(choose `v = w = ⊥`).  Next, `Δ` also evaluates to `⊥ ↦ ⊥` by use of
 `↦-intro` and `⊥-intro` and to `⊥` by `⊥-intro`. As we saw previously,
 whenever we can show that a program evaluates to two values, we can apply
 `⊔-intro` to join them together, so `Δ` evaluates to `(⊥ ↦ ⊥) ⊔ ⊥`. This
@@ -711,8 +711,8 @@ in proving that reduction implies denotational equality.
 As before, we need an extension lemma to handle the case where we
 proceed underneath a lambda abstraction. Suppose that `ρ` is a
 renaming that maps variables in `γ` into variables with equal or
-larger values in `δ`. This lemmas says that extending the renaming
-producing a renaming `ext r` that maps `γ , v` to `δ , v`.
+larger values in `δ`. This lemma says that extending the renaming
+produces a renaming `ext r` that maps `γ , v` to `δ , v`.
 
 ```
 ext-⊑ : ∀ {Γ Δ v} {γ : Env Γ} {δ : Env Δ}
@@ -1042,7 +1042,7 @@ their domains and `⨆cod u` returns the join of their codomains.
 
 We need just one property each for `⨆dom` and `⨆cod`.  Given a collection of
 functions represented by value `u`, and an entry `v ↦ w ∈ u`, we know
-that `v` is included in the domain of `v`.
+that `v` is included in the domain of `u`.
 
 ```
 ↦∈→⊆⨆dom : ∀{u v w : Value}
@@ -1079,7 +1079,7 @@ included in `w`.
 With the `⨆dom` and `⨆cod` functions in hand, we can make precise the
 conclusion of the inversion principle for functions, which we package
 into the following predicate named `factor`. We say that `v ↦ w`
-_factors_ `u` into `u′` if `u′` is a included in `u`, if `u′` contains only
+_factors_ `u` into `u′` if `u′` is included in `u`, if `u′` contains only
 functions, its domain is less than `v`, and its codomain is greater
 than `w`.
 
