@@ -1,3 +1,8 @@
+@font-face{
+    font-family: DejaVu mononoki Symbola Droid;
+    src:
+         url('../webfonts/DejaVu-mononoki-Symbola-Droid.woff') format('woff')
+}
 @font-face {
     font-family: 'mononoki';
     src: url('../webfonts/mononoki.woff2') format('woff2'),
@@ -19,7 +24,7 @@
 }
 
 @mixin code-font {
-    font-family: 'mononoki', 'DejaVu Sans Mono', 'Source Code Pro', 'Bitstream Vera Sans Mono', 'FreeMono', 'Courier New', 'Monaco', 'Menlo', monospace, serif;
+    font-family: 'DejaVu mononoki Symbola Droid', 'mononoki', 'DejaVu Sans Mono', 'Source Code Pro', 'Bitstream Vera Sans Mono', 'FreeMono', 'Courier New', 'Monaco', 'Menlo', monospace, serif;
     font-size: .85em;
 }
 @mixin code-container {
